@@ -1,6 +1,3 @@
-from app.services.business_summary_service import (
-    generate_business_summary,
-)
 from app.services.chart_data_generator import generate_chart_data
 from app.services.chart_recommender import recommend_charts
 from app.services.cleaning_recommender import (
@@ -61,14 +58,6 @@ def analyze_dataset(dataframe) -> dict:
         },
     }
 
-    business_summary = generate_business_summary(
-        dataset_info=dataset_info,
-        data_quality=data_quality,
-        eda=eda_analysis,
-        correlations=correlation_analysis,
-        cleaning_recommendations=cleaning_recommendations,
-        ai_insights=ai_insights,
-    )
 
     return {
         "rows": dataframe.shape[0],
@@ -91,5 +80,4 @@ def analyze_dataset(dataframe) -> dict:
         "chart_recommendations": chart_recommendations,
         "chart_data": chart_data,
         "ai_insights": ai_insights,
-        "business_summary": business_summary,
     }
