@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import api from "@/services/api";
+
 export default function AskYourData() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
@@ -24,32 +26,27 @@ export default function AskYourData() {
     setResult(null);
 
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/ask/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            question: question.trim(),
-          }),
-        }
-      );
+      const response = await api.post("/ask/", {
+        question: question.trim(),
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail || "Failed to answer question."
-        );
-      }
+      const data = response.data;
 
       setAnswer(data.ai_answer);
       setQuery(data.pandas_query);
       setResult(data.result);
     } catch (requestError) {
-      setError(requestError.message);
+      console.error(
+        "Ask Your Data error:",
+        requestError
+      );
+
+      const errorMessage =
+        requestError.response?.data?.detail ||
+        requestError.message ||
+        "Failed to answer question.";
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -97,6 +94,7 @@ export default function AskYourData() {
             onClick={() =>
               setQuestion("What is the churn rate?")
             }
+            disabled={loading}
           >
             What is the churn rate?
           </button>
@@ -108,6 +106,7 @@ export default function AskYourData() {
                 "What is the average monthly charge?"
               )
             }
+            disabled={loading}
           >
             Average monthly charge
           </button>
@@ -119,6 +118,7 @@ export default function AskYourData() {
                 "Which contract type has the most customers?"
               )
             }
+            disabled={loading}
           >
             Top contract type
           </button>
@@ -130,6 +130,7 @@ export default function AskYourData() {
                 "Which internet service is most popular?"
               )
             }
+            disabled={loading}
           >
             Popular internet service
           </button>
@@ -161,7 +162,9 @@ export default function AskYourData() {
 
             {result !== null && (
               <details className="raw-result">
-                <summary>View calculation result</summary>
+                <summary>
+                  View calculation result
+                </summary>
 
                 <pre>
                   {JSON.stringify(result, null, 2)}
