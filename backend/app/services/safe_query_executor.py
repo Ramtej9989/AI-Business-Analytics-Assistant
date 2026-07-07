@@ -25,6 +25,12 @@ ALLOWED_ATTRIBUTES = {
     "round",
     "to_frame",
     "isin",
+    "isnull",
+    "isna",
+    "notnull",
+    "notna",
+    "duplicated",
+    "drop_duplicates",
     "iloc",
     "loc",
 }
