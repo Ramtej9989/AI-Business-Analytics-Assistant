@@ -16,10 +16,6 @@ const navigationItems = [
     sectionId: "ai-insights",
   },
   {
-    label: "Business Summary",
-    sectionId: "business-summary",
-  },
-  {
     label: "Charts",
     sectionId: "charts",
   },
