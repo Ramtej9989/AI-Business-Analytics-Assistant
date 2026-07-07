@@ -6,7 +6,6 @@ from app.core.dataset_store import dataset_store
 from app.models.ai_insight import AIInsight
 from app.models.analysis_result import AnalysisResult
 from app.models.dataset import Dataset
-from app.services.ai_insight_service import generate_dataset_insights
 from app.services.data_loader import load_dataset
 from app.services.dataset_analyzer import analyze_dataset
 
@@ -25,8 +24,6 @@ async def upload_dataset(
     dataframe = await load_dataset(file)
 
     analysis = analyze_dataset(dataframe)
-
-    ai_result = generate_dataset_insights(analysis)
 
     dataset_record = Dataset(
         filename=file.filename,
@@ -52,23 +49,18 @@ async def upload_dataset(
 
     database.add(analysis_record)
 
-    ai_insight_record = None
+    ai_insight_record = AIInsight(
+        dataset_id=dataset_record.id,
+        insights=analysis["ai_insights"],
+    )
 
-    if ai_result["status"] == "success":
-        ai_insight_record = AIInsight(
-            dataset_id=dataset_record.id,
-            insights=ai_result["ai_insights"],
-        )
-
-        database.add(ai_insight_record)
+    database.add(ai_insight_record)
 
     database.commit()
 
     database.refresh(dataset_record)
     database.refresh(analysis_record)
-
-    if ai_insight_record is not None:
-        database.refresh(ai_insight_record)
+    database.refresh(ai_insight_record)
 
     dataset_store.save_dataset(
         dataframe=dataframe,
@@ -77,17 +69,14 @@ async def upload_dataset(
     )
 
     return {
-        "message": "Dataset uploaded and analyzed successfully",
+        "message": (
+            "Dataset uploaded and analyzed successfully"
+        ),
         "dataset_id": dataset_record.id,
         "analysis_id": analysis_record.id,
-        "ai_insight_id": (
-            ai_insight_record.id
-            if ai_insight_record is not None
-            else None
-        ),
+        "ai_insight_id": ai_insight_record.id,
         "dataset": {
             "filename": file.filename,
             **analysis,
         },
-        "ai_analysis": ai_result,
     }

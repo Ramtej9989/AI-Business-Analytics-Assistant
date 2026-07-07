@@ -16,6 +16,10 @@ const navigationItems = [
     sectionId: "ai-insights",
   },
   {
+    label: "Business Summary",
+    sectionId: "business-summary",
+  },
+  {
     label: "Charts",
     sectionId: "charts",
   },
@@ -86,12 +90,21 @@ export default function Sidebar() {
   }, [isMenuOpen]);
 
   const scrollToSection = (sectionId) => {
+    setActiveSection(sectionId);
+    setIsMenuOpen(false);
+
+    if (sectionId === "dashboard") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+
+      return;
+    }
+
     const section = document.getElementById(sectionId);
 
     if (section) {
-      setActiveSection(sectionId);
-      setIsMenuOpen(false);
-
       section.scrollIntoView({
         behavior: "smooth",
         block: "start",

@@ -8,6 +8,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import OverviewCards from "@/components/dashboard/OverviewCards";
 import DataQuality from "@/components/dashboard/DataQuality";
 import AIInsights from "@/components/dashboard/AIInsights";
+import BusinessSummary from "@/components/dashboard/BusinessSummary";
 import Charts from "@/components/dashboard/Charts";
 import AskYourData from "@/components/dashboard/AskYourData";
 
@@ -80,6 +81,15 @@ export default function Home() {
           className="scroll-section"
         >
           <AIInsights
+            analysisData={analysisData}
+          />
+        </div>
+
+        <div
+          id="business-summary"
+          className="scroll-section"
+        >
+          <BusinessSummary
             analysisData={analysisData}
           />
         </div>

@@ -2,7 +2,7 @@ import pandas as pd
 
 
 def generate_cleaning_recommendations(
-    dataframe: pd.DataFrame
+    dataframe: pd.DataFrame,
 ) -> list:
     recommendations = []
 
@@ -10,23 +10,30 @@ def generate_cleaning_recommendations(
 
     # Missing value recommendations
     for column in dataframe.columns:
-        missing_count = int(dataframe[column].isnull().sum())
+        missing_count = int(
+            dataframe[column].isnull().sum()
+        )
 
         if missing_count == 0:
             continue
 
         missing_percentage = (
-            missing_count / total_rows
-        ) * 100 if total_rows > 0 else 0
+            (missing_count / total_rows) * 100
+            if total_rows > 0
+            else 0
+        )
 
         if missing_percentage > 50:
             recommendations.append({
                 "column": column,
                 "issue": "high_missing_values",
-                "recommendation": "Consider dropping this column",
+                "recommendation": (
+                    "Consider dropping this column"
+                ),
+                "missing_count": missing_count,
                 "missing_percentage": round(
                     missing_percentage,
-                    2
+                    2,
                 ),
             })
 
@@ -39,9 +46,10 @@ def generate_cleaning_recommendations(
                 "recommendation": (
                     "Fill missing values using median"
                 ),
+                "missing_count": missing_count,
                 "missing_percentage": round(
                     missing_percentage,
-                    2
+                    2,
                 ),
             })
 
@@ -52,9 +60,10 @@ def generate_cleaning_recommendations(
                 "recommendation": (
                     "Fill missing values using mode"
                 ),
+                "missing_count": missing_count,
                 "missing_percentage": round(
                     missing_percentage,
-                    2
+                    2,
                 ),
             })
 
@@ -68,7 +77,8 @@ def generate_cleaning_recommendations(
             "column": None,
             "issue": "duplicate_rows",
             "recommendation": (
-                "Remove duplicate rows"
+                "Remove duplicate rows to prevent repeated "
+                "records from affecting analysis results"
             ),
             "duplicate_count": duplicate_rows,
         })
@@ -84,8 +94,10 @@ def generate_cleaning_recommendations(
                 "column": column,
                 "issue": "constant_column",
                 "recommendation": (
-                    "Consider dropping this column"
+                    "Consider dropping this column because "
+                    "it contains only one unique value"
                 ),
+                "unique_count": int(unique_values),
             })
 
     return recommendations
