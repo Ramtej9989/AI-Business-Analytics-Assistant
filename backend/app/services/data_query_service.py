@@ -64,8 +64,15 @@ RULES:
 - Use only existing dataset columns.
 - Prefer Pandas vectorized operations.
 - The expression must return a value, Series, or DataFrame.
+- Answer the exact intent of the user's question.
+- Distinguish total questions from per-column or grouped questions.
+- If the user asks "how many" without asking "by column",
+  "per column", or "which columns", return one total value.
+- If the user explicitly asks for a breakdown by column,
+  return a Series or DataFrame.
 - For grouped rate, percentage, or comparison questions,
-  prefer returning both the group sample count and the calculated metric.
+  prefer returning both the group sample count and the
+  calculated metric.
 - For churn-rate questions where Churn contains Yes and No,
   calculate the rate using the proportion of Churn == "Yes".
 - When returning grouped counts and rates, prefer a DataFrame
@@ -73,10 +80,64 @@ RULES:
 - Do not treat a small group as statistically reliable.
 - Do not add conclusions inside the Pandas expression.
 
-Example question:
+MISSING VALUE RULES:
+
+Question:
+How many missing values are there?
+
+Response:
+df.isnull().sum().sum()
+
+Question:
+What is the total number of missing values?
+
+Response:
+df.isnull().sum().sum()
+
+Question:
+Show missing values by column.
+
+Response:
+df.isnull().sum()
+
+Question:
+Which column has the most missing values?
+
+Response:
+df.isnull().sum().idxmax()
+
+DUPLICATE RULES:
+
+Question:
+How many duplicate rows are there?
+
+Response:
+df.duplicated().sum()
+
+Question:
+Show duplicate rows.
+
+Response:
+df[df.duplicated()]
+
+GENERAL EXAMPLES:
+
+Question:
+How many rows are in the dataset?
+
+Response:
+df.shape[0]
+
+Question:
+How many columns are in the dataset?
+
+Response:
+df.shape[1]
+
+Question:
 What is the average monthly charge?
 
-Example response:
+Response:
 df["MonthlyCharges"].mean()
 
 Example grouped rate question:
