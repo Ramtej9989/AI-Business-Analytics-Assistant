@@ -4,6 +4,8 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Scatter,
   ScatterChart,
@@ -21,6 +23,7 @@ export default function Charts({ analysisData }) {
         <div className="section-header">
           <div>
             <h2>Charts & Visualizations</h2>
+
             <p>
               Automatically generated visual analysis of your dataset.
             </p>
@@ -35,6 +38,13 @@ export default function Charts({ analysisData }) {
       </section>
     );
   }
+
+  const tooltipStyle = {
+    background: "#0d1b2a",
+    border: "1px solid #1e3a52",
+    borderRadius: "10px",
+    color: "#f1f5f9",
+  };
 
   const renderChart = (chart) => {
     if (
@@ -78,12 +88,7 @@ export default function Charts({ analysisData }) {
             />
 
             <Tooltip
-              contentStyle={{
-                background: "#0d1b2a",
-                border: "1px solid #1e3a52",
-                borderRadius: "10px",
-                color: "#f1f5f9",
-              }}
+              contentStyle={tooltipStyle}
               cursor={{
                 fill: "rgba(6, 182, 212, 0.08)",
               }}
@@ -95,6 +100,62 @@ export default function Charts({ analysisData }) {
               radius={[6, 6, 0, 0]}
             />
           </BarChart>
+        </ResponsiveContainer>
+      );
+    }
+
+    if (chart.chart_type === "line") {
+      return (
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart
+            data={chart.data}
+            margin={{
+              top: 10,
+              right: 20,
+              left: 0,
+              bottom: 30,
+            }}
+          >
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="#1e3a52"
+            />
+
+            <XAxis
+              dataKey="label"
+              stroke="#94a3b8"
+              tick={{
+                fill: "#94a3b8",
+                fontSize: 11,
+              }}
+              angle={-25}
+              textAnchor="end"
+              minTickGap={20}
+            />
+
+            <YAxis
+              stroke="#94a3b8"
+              tick={{
+                fill: "#94a3b8",
+                fontSize: 11,
+              }}
+            />
+
+            <Tooltip
+              contentStyle={tooltipStyle}
+            />
+
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke="#22d3ee"
+              strokeWidth={3}
+              dot={false}
+              activeDot={{
+                r: 6,
+              }}
+            />
+          </LineChart>
         </ResponsiveContainer>
       );
     }
@@ -141,12 +202,7 @@ export default function Charts({ analysisData }) {
               cursor={{
                 strokeDasharray: "3 3",
               }}
-              contentStyle={{
-                background: "#0d1b2a",
-                border: "1px solid #1e3a52",
-                borderRadius: "10px",
-                color: "#f1f5f9",
-              }}
+              contentStyle={tooltipStyle}
             />
 
             <Scatter
@@ -174,6 +230,7 @@ export default function Charts({ analysisData }) {
 
         <div className="chart-count">
           <span>Generated Charts</span>
+
           <strong>{charts.length}</strong>
         </div>
       </div>
@@ -187,6 +244,7 @@ export default function Charts({ analysisData }) {
             <div className="chart-card-header">
               <div>
                 <h3>{chart.title}</h3>
+
                 <p>{chart.reason}</p>
               </div>
 

@@ -1,3 +1,7 @@
+import numpy as np
+import pandas as pd
+
+
 def generate_chart_data(
     dataframe,
     chart_recommendations,
@@ -36,16 +40,17 @@ def generate_chart_data(
 
         elif chart_type == "histogram":
             column_data = (
-                dataframe[x_axis]
+                pd.to_numeric(
+                    dataframe[x_axis],
+                    errors="coerce",
+                )
                 .dropna()
             )
 
             if not column_data.empty:
                 bin_counts = 10
 
-                counts, bin_edges = __import__(
-                    "numpy"
-                ).histogram(
+                counts, bin_edges = np.histogram(
                     column_data,
                     bins=bin_counts,
                 )
@@ -61,11 +66,62 @@ def generate_chart_data(
                     for index in range(len(counts))
                 ]
 
-        elif chart_type == "scatter":
-            scatter_data = (
-                dataframe[
-                    [x_axis, y_axis]
+        elif chart_type == "line":
+            line_data = dataframe[
+                [x_axis, y_axis]
+            ].copy()
+
+            line_data[x_axis] = pd.to_datetime(
+                line_data[x_axis],
+                errors="coerce",
+            )
+
+            line_data[y_axis] = pd.to_numeric(
+                line_data[y_axis],
+                errors="coerce",
+            )
+
+            line_data = line_data.dropna()
+
+            if not line_data.empty:
+                line_data = (
+                    line_data
+                    .groupby(x_axis)[y_axis]
+                    .mean()
+                    .reset_index()
+                    .sort_values(x_axis)
+                )
+
+                chart["data"] = [
+                    {
+                        "label": row[x_axis].strftime(
+                            "%Y-%m-%d"
+                        ),
+                        "value": round(
+                            float(row[y_axis]),
+                            2,
+                        ),
+                    }
+                    for _, row in line_data.iterrows()
                 ]
+
+        elif chart_type == "scatter":
+            scatter_data = dataframe[
+                [x_axis, y_axis]
+            ].copy()
+
+            scatter_data[x_axis] = pd.to_numeric(
+                scatter_data[x_axis],
+                errors="coerce",
+            )
+
+            scatter_data[y_axis] = pd.to_numeric(
+                scatter_data[y_axis],
+                errors="coerce",
+            )
+
+            scatter_data = (
+                scatter_data
                 .dropna()
                 .head(500)
             )
