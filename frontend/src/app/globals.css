@@ -1959,3 +1959,180 @@ body {
     padding: 14px;
   }
 }
+
+/* =================================
+   FINAL MOBILE WIDTH FIX
+   Keep this block at the very bottom.
+================================= */
+
+@media (max-width: 800px) {
+  html,
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .dashboard-layout {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-content {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    padding: 28px 20px !important;
+    overflow-x: hidden !important;
+  }
+
+  .scroll-section,
+  .dashboard-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-header,
+  .section-header {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .overview-grid,
+  .quality-grid,
+  .ai-insights-grid,
+  .charts-grid {
+    display: grid !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .overview-card,
+  .quality-card,
+  .ai-insight-card,
+  .chart-card,
+  .recommendations-card,
+  .ask-data-card,
+  .charts-empty-card,
+  .active-dataset,
+  .quality-score,
+  .chart-count {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .ai-insight-card,
+  .insight-list,
+  .insight-list p,
+  .recommendation-item,
+  .recommendation-item > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .ai-insight-card h3,
+  .ai-insight-card p,
+  .insight-list p,
+  .recommendation-item strong,
+  .recommendation-item p,
+  .chart-card-header h3,
+  .chart-card-header p {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .recommendation-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .chart-card {
+    overflow: hidden !important;
+  }
+
+  .chart-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .chart-wrapper .recharts-responsive-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .chart-wrapper svg {
+    max-width: none !important;
+  }
+
+  .ask-data-form {
+    width: 100% !important;
+    flex-direction: column !important;
+  }
+
+  .ask-data-form input,
+  .ask-data-form button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .question-suggestions {
+    display: grid !important;
+    width: 100% !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .question-suggestions button {
+    width: 100% !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-content {
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding: 22px 14px !important;
+  }
+
+  .overview-card,
+  .quality-card,
+  .ai-insight-card,
+  .chart-card,
+  .recommendations-card {
+    padding: 18px !important;
+  }
+
+  .chart-card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .dashboard-content {
+    padding: 18px 10px !important;
+  }
+
+  .overview-card,
+  .quality-card,
+  .ai-insight-card,
+  .chart-card,
+  .recommendations-card,
+  .ask-data-card {
+    padding: 14px !important;
+  }
+}
